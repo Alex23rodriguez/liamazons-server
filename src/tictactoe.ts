@@ -7,7 +7,7 @@
  */
 import type { Game as bgGame } from "boardgame.io";
 
-interface TicTacToeState {
+export interface TicTacToeState {
   cells: string[];
 }
 
@@ -65,7 +65,7 @@ export const Game: bgGame<TicTacToeState> = {
 
   ai: {
     enumerate: (G) => {
-      let r = [];
+      const r = [];
       for (let i = 0; i < 9; i++) {
         if (G.cells[i] === null) {
           r.push({ move: "clickCell", args: [i] });
