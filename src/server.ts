@@ -12,7 +12,7 @@ import { Game as TicTacToe } from "./tictactoe";
 const PORT = Number(process.env.PORT) || 8000;
 const server = Server({
   games: [TicTacToe],
-  origins: ["*", Origins.LOCALHOST], // TODO: remove wildcard after dev is done!
+  origins: [/.*/, Origins.LOCALHOST], // TODO: remove wildcard after dev is done!
 });
 console.log(`port is ${PORT}`);
 server.run(PORT);
