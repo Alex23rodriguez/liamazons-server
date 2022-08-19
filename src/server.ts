@@ -9,12 +9,10 @@
 import { Server, Origins } from "boardgame.io/server";
 import { Game as TicTacToe } from "./tictactoe";
 
-const PORT = 8000;
+const PORT = Number(process.env.PORT) || 8000;
 const server = Server({
   games: [TicTacToe],
   origins: [Origins.LOCALHOST],
 });
 console.log(`port is ${PORT}`);
-server.run(PORT, () => {
-  console.log(`Serving at: http://localhost:${PORT}`);
-});
+server.run(PORT);
