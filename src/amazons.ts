@@ -35,7 +35,11 @@ export const AmazonsGame: Game<AmazonsState> = {
       ) {
         return { ...G };
       }
-      amazons.move(m);
+      const success = amazons.move(m);
+      if (!success) {
+        console.error("move was invalid!");
+        return { ...G };
+      }
       return { fen: amazons.fen(), last_move: m };
     }) as MoveFn<AmazonsState>,
 
