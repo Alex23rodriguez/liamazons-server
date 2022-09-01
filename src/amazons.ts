@@ -1,3 +1,4 @@
+import { INVALID_MOVE } from "boardgame.io/core";
 import { Amazons, DEFAULT_POSITIONS } from "amazons-game-engine";
 
 import type { Game, MoveFn, MoveMap, TurnConfig } from "boardgame.io";
@@ -11,8 +12,9 @@ export interface SetupData {
 }
 
 function Load(fen: FEN) {
-  return Amazons(fen);
+  return Amazons(fen, false); // unsafe loading
 }
+
 export const AmazonsGame: Game<AmazonsState> = {
   name: "amazons",
 
@@ -20,6 +22,7 @@ export const AmazonsGame: Game<AmazonsState> = {
   maxPlayers: 2,
 
   setup: (_, setupData: SetupData) => {
+    // TODO: be careful not to give this an invalid fen! maybe return default if so
     if (setupData?.fen) {
       return { fen: setupData.fen };
     }
@@ -33,19 +36,20 @@ export const AmazonsGame: Game<AmazonsState> = {
         (amazons.turn() == "w" && ctx.currentPlayer == "1") ||
         (amazons.turn() == "b" && ctx.currentPlayer == "0")
       ) {
-        return { ...G };
+        console.error("wrong player!");
+        return INVALID_MOVE;
       }
       const success = amazons.move(m);
       if (!success) {
         console.error("move was invalid!");
-        return { ...G };
+        return INVALID_MOVE;
       }
       return { fen: amazons.fen(), last_move: m };
     }) as MoveFn<AmazonsState>,
 
     random_move: ((G) => {
       const amazons = Load(G.fen);
-      let move = amazons.random_move();
+      const move = amazons.random_move();
       return { fen: amazons.fen(), last_move: move };
     }) as MoveFn<AmazonsState>,
   } as MoveMap<AmazonsState>,
