@@ -2,9 +2,16 @@ import { INVALID_MOVE } from "boardgame.io/core";
 import { Amazons, DEFAULT_POSITIONS } from "amazons-game-engine";
 
 import type { Game, MoveFn, MoveMap, TurnConfig } from "boardgame.io";
-import type { FEN, GameState, Move } from "amazons-game-engine/dist/types";
+import type {
+  FEN,
+  GameState,
+  Move,
+  Square as TSquare,
+} from "amazons-game-engine/dist/types";
 
-export type AmazonsState = GameState;
+export interface AmazonsState extends GameState {
+  last_move: TSquare[];
+}
 
 export interface SetupData {
   fen: FEN;
@@ -27,10 +34,10 @@ export const AmazonsGame: Game<AmazonsState> = {
     let amz: Amazons;
     if (setupData?.fen) {
       amz = Load(setupData.fen);
-      return amz.state();
+      return { ...amz.state(), last_move: [] };
     }
     amz = Load(DEFAULT_POSITIONS[10]!);
-    return amz.state();
+    return { ...amz.state(), last_move: [] };
   },
 
   moves: {
@@ -48,13 +55,17 @@ export const AmazonsGame: Game<AmazonsState> = {
         console.error("move was invalid!");
         return INVALID_MOVE;
       }
-      return amz.state();
+      const last_move =
+        m.length === 2 ? (m as TSquare[]) : G.last_move.concat(m as TSquare[]);
+      return { ...amz.state(), last_move };
     }) as MoveFn<AmazonsState>,
 
     random_move: ((G) => {
       const amz = Load(G);
-      amz.random_move();
-      return amz.state();
+      const m = amz.random_move();
+      const last_move =
+        m.length === 2 ? (m as TSquare[]) : G.last_move.concat(m as TSquare[]);
+      return { ...amz.state(), last_move };
     }) as MoveFn<AmazonsState>,
   } as MoveMap<AmazonsState>,
 
