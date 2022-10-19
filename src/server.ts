@@ -1,9 +1,9 @@
 import { Server, Origins } from "boardgame.io/server";
-import { PostgresStore } from "bgio-postgres";
+import { PersistSQLStore } from "bgio-sql";
 import { Game as TicTacToe } from "./tictactoe";
 import { AmazonsGame as Amazons } from "./amazons";
 
-const db = new PostgresStore(process.env.DATABASE_URL);
+const db = new PersistSQLStore(process.env.DATABASE_URL);
 
 const PORT = Number(process.env.PORT) || 8000;
 const server = Server({
