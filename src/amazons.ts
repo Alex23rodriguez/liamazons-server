@@ -41,7 +41,7 @@ export const AmazonsGame: Game<AmazonsState> = {
   },
 
   moves: {
-    move: ((G, ctx, m: Move) => {
+    move: (({ G, ctx }, m: Move) => {
       const amz = Load(G);
       if (
         (amz.turn() == "w" && ctx.currentPlayer == "1") ||
@@ -60,7 +60,7 @@ export const AmazonsGame: Game<AmazonsState> = {
       return { ...amz.state(), last_move };
     }) as MoveFn<AmazonsState>,
 
-    random_move: ((G) => {
+    random_move: (({ G }) => {
       const amz = Load(G);
       const m = amz.random_move();
       const last_move =
@@ -74,7 +74,7 @@ export const AmazonsGame: Game<AmazonsState> = {
     maxMoves: 2,
   } as TurnConfig,
 
-  endIf: (G) => {
+  endIf: ({ G }) => {
     const amazons = Load(G);
     if (amazons.game_over()) return amazons.turn(true);
   },
