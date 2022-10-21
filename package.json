@@ -11,7 +11,7 @@
   "license": "ISC",
   "dependencies": {
     "amazons-game-engine": "^0.3.6",
-    "bgio-sql": "^1.0.6",
+    "bgio-sql": "^1.0.7",
     "boardgame.io": "^0.50.0",
     "mysql2": "^2.3.3",
     "ts-node": "^10.9.1",
